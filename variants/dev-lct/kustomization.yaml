@@ -1,22 +1,21 @@
 # With kubectl -n kafka port-forward kafka-0 9094
 bases:
-- ../scale-1
+- ../scale-1-ephemeral
 patchesStrategicMerge:
 - jmx-disable.yaml
 - kafka.yaml
 - pzoo.yaml
 patchesJson6902:
+# Currently these duplicate each others' directives to avoid an apply -k error: found conflict between different patches
 - target:
     group: apps
     version: v1
     kind: StatefulSet
     name: kafka
-    namespace: kafka
   path: listener-localhost.json
 - target:
     group: apps
     version: v1
     kind: StatefulSet
     name: kafka
-    namespace: kafka
-  path: num-partitions-1.json
+  path: auto-create-topics.json
